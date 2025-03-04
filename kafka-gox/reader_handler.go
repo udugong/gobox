@@ -57,11 +57,10 @@ func (h *Handler[T]) ReadMsg(ctx context.Context, r *kafka.Reader) error {
 
 		if err := h.fn(ctx, msg, t); err != nil {
 			h.logError(ctx, "处理消息失败", err, msg)
-			continue
 		}
 
 		if err := r.CommitMessages(ctx, msg); err != nil {
-			h.logError(ctx, "处理消息成功但 kafka 提交消息失败", err, msg)
+			h.logError(ctx, "kafka 提交消息失败", err, msg)
 		}
 	}
 	return nil

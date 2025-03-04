@@ -62,10 +62,9 @@ func (h *BulkHandler[T]) ReadMsg(ctx context.Context, r *kafka.Reader) error {
 		}
 		if err := h.fn(ctx, batch, ts); err != nil {
 			h.logError(ctx, "批量处理消息失败", err, batch)
-			continue
 		}
 		if err := r.CommitMessages(ctx, batch...); err != nil {
-			h.logError(ctx, "批量处理消息成功但 kafka 提交消息失败", err, batch)
+			h.logError(ctx, "kafka 提交消息失败", err, batch)
 		}
 	}
 	return nil
